@@ -50,5 +50,5 @@ if __name__ == "__main__":
     try:
         main()
     finally:
-        log.info('stopped')
+        log.info("stopped")
         gpio.cleanup(list(channel_map.keys()))
