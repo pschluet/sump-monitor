@@ -1,5 +1,13 @@
 import RPi.GPIO as gpio
 import time
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
+    level=logging.INFO,
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+log = logging.getLogger("main")
 
 gpio.setmode(gpio.BOARD)
 
@@ -24,10 +32,11 @@ channel_map = {
 
 def handle_change(channel: int):
     state = "DOWN" if gpio.input(channel) else "UP"
-    print(f"{channel_map[channel]} changed {state}!")
+    log.info(f"{channel_map[channel]} changed {state}")
 
 
 def main():
+    log.info("started")
     gpio.setup(list(channel_map.keys()), gpio.IN, pull_up_down=gpio.PUD_DOWN)
 
     for channel in channel_map.keys():
@@ -41,4 +50,5 @@ if __name__ == "__main__":
     try:
         main()
     finally:
+        log.info('stopped')
         gpio.cleanup(list(channel_map.keys()))
