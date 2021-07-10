@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 
 import phoneHome from '@functions/phoneHome';
+import createLevelState from '@functions/createLevelState';
 
 const serverlessConfiguration: AWS = {
   service: 'sump-monitor-api',
@@ -29,7 +30,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { phoneHome },
+  functions: { phoneHome, createLevelState },
 };
 
 module.exports = serverlessConfiguration;
