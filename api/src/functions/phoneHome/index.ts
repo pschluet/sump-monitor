@@ -7,13 +7,14 @@ export default {
     {
       http: {
         method: 'post',
-        path: 'hello',
+        path: 'phoneHome',
+        private: true,
         request: {
           schema: {
-            'application/json': schema
-          }
-        }
-      }
-    }
-  ]
-}
+            'application/json': schema,
+          },
+        },
+      },
+    },
+  ],
+};

@@ -5,12 +5,17 @@ import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
 import schema from './schema';
+import { logger } from '@libs/logger';
 
-const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const phoneHome: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
+  event,
+) => {
+  const time = new Date();
+  logger.info({time})
   return formatJSONResponse({
-    message: `Hello ${event.body.name}, welcome to the exciting Serverless world!`,
+    message: time,
     event,
   });
-}
+};
 
-export const main = middyfy(hello);
+export const main = middyfy(phoneHome);
