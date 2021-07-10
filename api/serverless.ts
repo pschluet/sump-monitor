@@ -2,10 +2,10 @@ import type { AWS } from '@serverless/typescript';
 
 import phoneHome from '@functions/phoneHome';
 import createLevelState from '@functions/createLevelState';
+import { region } from 'src/libs/constants';
 
-export const levelStateTableName = 'LevelState';
-export const phoneHomeTableName = 'PhoneHome';
-export const region = 'us-east-1';
+const levelStateTableName = 'LevelState';
+const phoneHomeTableName = 'PhoneHome';
 
 const serverlessConfiguration: AWS = {
   service: 'sump-monitor-api',
@@ -15,8 +15,15 @@ const serverlessConfiguration: AWS = {
       webpackConfig: './webpack.config.js',
       includeModules: true,
     },
+    customDomain: {
+      domainName: 'sump.pauldev.io',
+      createRoute53Record: true,
+      autoDomain: true,
+      certificateArn:
+        'arn:aws:acm:us-east-1:435432815368:certificate/0e97aedc-46a5-4394-b28a-5bb0766d3e65',
+    },
   },
-  plugins: ['serverless-webpack'],
+  plugins: ['serverless-webpack', 'serverless-domain-manager'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',

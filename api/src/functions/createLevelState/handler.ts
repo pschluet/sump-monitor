@@ -7,8 +7,9 @@ import schema from './schema';
 import { logger } from '@libs/logger';
 import {DynamoDB} from 'aws-sdk';
 import { format } from 'date-fns';
+import { region } from '../../libs/constants';
 
-const db = new DynamoDB.DocumentClient({ region: 'us-east-1' });
+const db = new DynamoDB.DocumentClient({ region });
 
 const createLevelState: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event,

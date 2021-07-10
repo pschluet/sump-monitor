@@ -1,0 +1,1 @@
+npx sls invoke local -f createLevelState --path src/functions/createLevelState/mock.json

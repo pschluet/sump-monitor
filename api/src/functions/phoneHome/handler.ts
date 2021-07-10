@@ -6,8 +6,9 @@ import { middyfy } from '@libs/lambda';
 import schema from './schema';
 import { logger } from '@libs/logger';
 import { DynamoDB } from 'aws-sdk';
+import { region } from '../../libs/constants';
 
-const db = new DynamoDB.DocumentClient({region: 'us-east-1'});
+const db = new DynamoDB.DocumentClient({ region });
 
 const phoneHome: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async () => {
   const now = new Date();
