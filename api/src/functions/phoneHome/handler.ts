@@ -15,7 +15,7 @@ const phoneHome: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async () =>
   try {
     await db
       .put({
-        TableName: 'PhoneHome', // TODO: env var
+        TableName: process.env.PHONE_HOME_TABLE_NAME,
         Item: {
           id: 1,
           timestamp: now.getTime(),

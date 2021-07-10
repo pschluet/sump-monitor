@@ -3,6 +3,10 @@ import type { AWS } from '@serverless/typescript';
 import phoneHome from '@functions/phoneHome';
 import createLevelState from '@functions/createLevelState';
 
+export const levelStateTableName = 'LevelState';
+export const phoneHomeTableName = 'PhoneHome';
+export const region = 'us-east-1';
+
 const serverlessConfiguration: AWS = {
   service: 'sump-monitor-api',
   frameworkVersion: '2',
@@ -16,6 +20,7 @@ const serverlessConfiguration: AWS = {
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
+    region,
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -24,6 +29,8 @@ const serverlessConfiguration: AWS = {
     logRetentionInDays: 14,
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      LEVEL_STATE_TABLE_NAME: levelStateTableName,
+      PHONE_HOME_TABLE_NAME: phoneHomeTableName,
     },
     lambdaHashingVersion: '20201221',
     iam: {
@@ -32,7 +39,10 @@ const serverlessConfiguration: AWS = {
           {
             Effect: 'Allow',
             Action: ['dynamodb:PutItem'],
-            Resource: '*' // TODO: specify tables
+            Resource: [
+              `arn:aws:dynamodb:${region}:*:table/${levelStateTableName}`,
+              `arn:aws:dynamodb:${region}:*:table/${phoneHomeTableName}`,
+            ],
           },
         ],
       },
@@ -54,7 +64,7 @@ const serverlessConfiguration: AWS = {
             { AttributeName: 'timestamp', KeyType: 'RANGE' },
           ],
           BillingMode: 'PAY_PER_REQUEST',
-          TableName: 'LevelState',
+          TableName: levelStateTableName,
         },
       },
       PhoneHomeTable: {
@@ -63,7 +73,7 @@ const serverlessConfiguration: AWS = {
           AttributeDefinitions: [{ AttributeName: 'id', AttributeType: 'N' }],
           KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
           BillingMode: 'PAY_PER_REQUEST',
-          TableName: 'PhoneHome',
+          TableName: phoneHomeTableName,
         },
       },
     },

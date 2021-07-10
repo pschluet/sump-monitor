@@ -14,22 +14,30 @@ const createLevelState: ValidatedEventAPIGatewayProxyEvent<typeof schema> = asyn
   event,
 ) => {
   const now = new Date();
+  const levels = {
+    mainPumpSensor1Underwater: event.body.mainPumpSensor1Underwater,
+    mainPumpSensor2Underwater: event.body.mainPumpSensor2Underwater,
+    backupPumpSensor1Underwater: event.body.backupPumpSensor1Underwater,
+    backupPumpSensor2Underwater: event.body.backupPumpSensor2Underwater,
+    floodAlarmSensor1Underwater: event.body.floodAlarmSensor1Underwater,
+    floodAlarmSensor2Underwater: event.body.floodAlarmSensor2Underwater,
+  };
 
   try {
     await db
       .put({
-        TableName: 'LevelState', // TODO: env var
+        TableName: process.env.LEVEL_STATE_TABLE_NAME,
         Item: {
           date: format(now, 'yyyy-MM-dd'),
           timestamp: now.getTime(),
-          ...event.body,
+          ...levels
         },
       })
       .promise();
 
     logger.info({ msg: 'Stored level state!', body: event.body });
     return formatJSONResponse({
-      ...event.body
+      ...levels
     });
   } catch (error) {
     logger.error({ error });
