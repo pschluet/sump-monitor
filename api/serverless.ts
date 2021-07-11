@@ -2,6 +2,8 @@ import type { AWS } from '@serverless/typescript';
 
 import phoneHome from '@functions/phoneHome';
 import createLevelState from '@functions/createLevelState';
+import getLevelStates from '@functions/getLevelStates';
+import getLastPhoneHomeTime from '@functions/getLastPhoneHomeTime';
 import { region } from 'src/libs/constants';
 
 const levelStateTableName = 'LevelState';
@@ -45,7 +47,12 @@ const serverlessConfiguration: AWS = {
         statements: [
           {
             Effect: 'Allow',
-            Action: ['dynamodb:PutItem'],
+            Action: [
+              'dynamodb:PutItem',
+              'dynamodb:Scan',
+              'dynamodb:Query',
+              'dynamodb:GetItem',
+            ],
             Resource: [
               `arn:aws:dynamodb:${region}:*:table/${levelStateTableName}`,
               `arn:aws:dynamodb:${region}:*:table/${phoneHomeTableName}`,
@@ -56,7 +63,12 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { phoneHome, createLevelState },
+  functions: {
+    phoneHome,
+    createLevelState,
+    getLevelStates,
+    getLastPhoneHomeTime,
+  },
   resources: {
     Resources: {
       LevelStateTable: {

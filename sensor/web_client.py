@@ -21,7 +21,7 @@ class WebClient:
 
     def create_level_state(self, level_state: LevelState) -> bool:
         result = requests.post(
-            url=f"{self.base_url}/createLevelState",
+            url=f"{self.base_url}/levelState",
             json=asdict(level_state),
             headers=self.headers,
         )
