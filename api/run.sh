@@ -1,1 +1,1 @@
-npx sls invoke local -f createLevelState --path src/functions/createLevelState/mock.json
+npx sls invoke local -f getLevelStates --path src/functions/getLevelStates/mock.json
