@@ -1,0 +1,6 @@
+{
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"mainPumpSensor1Underwater\":false,\"mainPumpSensor2Underwater\":false,\"backupPumpSensor1Underwater\":false,\"backupPumpSensor2Underwater\":false,\"floodAlarmSensor1Underwater\":false,\"floodAlarmSensor2Underwater\":false}"
+}

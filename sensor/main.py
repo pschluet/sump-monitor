@@ -1,3 +1,5 @@
+from web_client import WebClient
+from model import LevelState
 import RPi.GPIO as gpio
 import time
 import logging
@@ -8,6 +10,8 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 log = logging.getLogger("main")
+
+web_client = WebClient()
 
 gpio.setmode(gpio.BOARD)
 
@@ -31,8 +35,19 @@ channel_map = {
 
 
 def handle_change(channel: int):
-    state = "DOWN" if gpio.input(channel) else "UP"
-    log.info(f"{channel_map[channel]} changed {state}")
+    changed_pin_state = "DOWN" if gpio.input(channel) else "UP"
+    log.info(f"{channel_map[channel]} changed {changed_pin_state}")
+
+    state = LevelState(
+        mainPumpSensor1Underwater=not gpio.input(float_switch_1a),
+        mainPumpSensor2Underwater=not gpio.input(float_switch_1b),
+        backupPumpSensor1Underwater=not gpio.input(float_switch_2a),
+        backupPumpSensor2Underwater=not gpio.input(float_switch_2b),
+        floodAlarmSensor1Underwater=not gpio.input(float_switch_3a),
+        floodAlarmSensor2Underwater=not gpio.input(float_switch_3b),
+    )
+
+    web_client.create_level_state(state)
 
 
 def main():
@@ -43,7 +58,8 @@ def main():
         gpio.add_event_detect(channel, gpio.BOTH, callback=handle_change)
 
     while True:
-        time.sleep(0.3)
+        web_client.phone_home()
+        time.sleep(60 * 5)
 
 
 if __name__ == "__main__":
