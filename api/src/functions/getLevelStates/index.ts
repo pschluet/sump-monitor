@@ -7,6 +7,7 @@ export default {
       http: {
         method: 'get',
         path: 'levelStates',
+        cors: true,
         request: {
           parameters: {
             querystrings: {
