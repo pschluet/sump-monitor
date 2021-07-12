@@ -43,6 +43,8 @@ const plotData: ChartData = {
   ],
 };
 
+// TODO: fix timezone problems
+
 export const HistoryPlot = (props: HistoryPlotProps) => {
   const [data, setData] = useState(plotData);
 
@@ -55,9 +57,8 @@ export const HistoryPlot = (props: HistoryPlotProps) => {
         );
         if (result.data.length > 0) {
           const d = result.data;
-          console.log(d);
           setData({
-            labels: d.map((x) => x.timestamp),
+            labels: d.map((x) => format(new Date(x.timestamp), 'h:mm:ss')),
             datasets: [
               {
                 label: 'Main 1',
@@ -71,22 +72,22 @@ export const HistoryPlot = (props: HistoryPlotProps) => {
               },
               {
                 label: 'Backup 1',
-                data: d.map(x => +x.backupPumpSensor1Underwater),
+                data: d.map((x) => +x.backupPumpSensor1Underwater),
                 borderColor: '#FFAB00',
               },
               {
                 label: 'Backup 2',
-                data: d.map(x => +x.backupPumpSensor2Underwater),
+                data: d.map((x) => +x.backupPumpSensor2Underwater),
                 borderColor: '#FFD173',
               },
               {
                 label: 'Flood 1',
-                data: d.map(x => +x.floodAlarmSensor1Underwater),
+                data: d.map((x) => +x.floodAlarmSensor1Underwater),
                 borderColor: '#FF0700',
               },
               {
                 label: 'Flood 2',
-                data: d.map(x => +x.floodAlarmSensor2Underwater),
+                data: d.map((x) => +x.floodAlarmSensor2Underwater),
                 borderColor: '#FF7673',
               },
             ],
