@@ -3,6 +3,7 @@ from model import LevelState
 import RPi.GPIO as gpio
 import time
 import logging
+import traceback
 
 logging.basicConfig(
     format="%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s",
@@ -63,8 +64,12 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    finally:
-        log.info("stopped")
-        gpio.cleanup(list(channel_map.keys()))
+    while True:
+        try:
+            main()
+        except:
+            log.error(traceback.format_exc())
+        finally:
+            log.info("stopped")
+            gpio.cleanup(list(channel_map.keys()))
+            time.sleep(5)
